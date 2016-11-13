@@ -6,6 +6,7 @@ from simulator import Simulator
 from random import randint
 import numpy as np
 
+
 class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
         This is the object you will be modifying. """ 
@@ -91,7 +92,6 @@ class LearningAgent(Agent):
         # When learning, check if the state is in the Q-table
         #   If it is not, create a dictionary in the Q-table for the current 'state'
         #   For each action, set the Q-value for the state-action pair to 0
-        
         state = (waypoint,inputs['light'],inputs['oncoming'],inputs['left'])
         # if self.learning:
         #     if not (state in self.Q.keys()):
@@ -150,7 +150,11 @@ class LearningAgent(Agent):
             if(rand < self.epsilon*100):
                 action  = self.valid_actions[randint(0, 3)]
             else:
-                action  = max(self.Q[state], key=self.Q[state].get) #get action with maximum value
+                highest = max(self.Q[state].values()) #Get highest value
+                maximum_keys =  [k for k,v in self.Q[state].items() if v == highest] #get all keys with the highest value
+                random_max = randint(0,len(maximum_keys)-1) #random int to choose a key with highest value
+                action = maximum_keys[random_max] #choose random action
+                # action  = max(self.Q[state], key=self.Q[state].get) #get action with maximum value
         else:
             action  = self.valid_actions[randint(0, 3)]
         return action
